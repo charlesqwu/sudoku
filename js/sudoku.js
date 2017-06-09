@@ -395,45 +395,45 @@ Sudoku.prototype.addValue = function(value) {
   
     //delete value or write it in cell
     $( this.cell ).find('span').text( (value === 0) ? '' : value );
-        
+
+    var step_status = 1;
     if ( this.cell !== null && ( horizontal_cells_exists.length || vertical_cells_exists.length || group_cells_exists.length ) ) {
         if (old_value !== value) {
-            $( this.cell ).addClass('notvalid');            
+            $( this.cell ).addClass('notvalid');
+	    step_status = 0;
         } else {            
-            $(this.cell).find('span').text('');            
+            $(this.cell).find('span').text('');      
         }
     } else {
         //add value
         $(this.cell).removeClass('notvalid');        
-        console.log('Value added ', value);
 
-	// send the game playing step's data in JSON to the backend
-	var step_data = {
-	    row : position.x,
-	    col : position.y,
-	    number : value,
-	    step_status : 1,
-	    game_status : 0
-	};
-	$.ajax({
-            type: "POST",
-            url: "./backend/save_step.php",
-	    data: JSON.stringify(step_data),
-	    contentType: "application/json",	    
-	    complete: function(ajax_response_data) {
-		console.log(ajax_response_data);
-	    }
-	});
-	
         //remove all notes from current cell,  line column and group
         $(horizontal_notes).remove();
         $(vertical_notes).remove();
         $(group_notes).remove();      
     }
+
+    // send the game playing step's data in JSON to the backend
+    var step_data = {
+	row : position.x,
+	col : position.y,
+	number : value,
+	step_status : step_status,
+	game_status : 0
+    };
+    $.ajax({
+        type: "POST",
+        url: "./backend/save_step.php",
+	data: JSON.stringify(step_data),
+	contentType: "application/json",	    
+	complete: function(ajax_response_data) {
+	    console.log(ajax_response_data);
+	}
+    });
     
     //recalculate completed cells
     this.cellsComplete = $('#'+ this.id +' .sudoku_board .cell:not(.notvalid) span:not(:empty)').length;
-    console.log('is game over? ', this.cellsComplete, this.cellsNr, (this.cellsComplete === this.cellsNr) );
     //game over
     if (this.cellsComplete === this.cellsNr) {
         this.gameOver();
@@ -489,6 +489,23 @@ Sudoku.prototype.gameOver = function(){
     this.status = this.END;   
   
     $('#'+ this.id +' .gameover_container').show();
+
+    var step_data = {
+	row : 0,
+	col : 0,
+	number : 0,
+	step_status : 0,
+	game_status : 1
+    };
+    $.ajax({
+        type: "POST",
+        url: "./backend/save_step.php",
+	data: JSON.stringify(step_data),
+	contentType: "application/json",	    
+	complete: function(ajax_response_data) {
+	    console.log(ajax_response_data);
+	}
+    });    
 };
 
 /**
