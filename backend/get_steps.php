@@ -1,6 +1,8 @@
 <?php
 include("./db_connection.php");
 
+// get all the game playing steps' data from database
+// (currently, not taking care of issues related to user ID, user session, and game #s)
 $sql_query = "SELECT time, row, col, number, step_status, game_status FROM steps";
 $statement = $conn->prepare($sql_query);
 $statement->execute();

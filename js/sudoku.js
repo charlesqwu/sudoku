@@ -250,8 +250,6 @@ Sudoku.prototype.drawBoard = function(){
 Sudoku.prototype.resizeWindow = function(){
     var screen = { w: $(window).width(), h: $(window).height() };
 
-    console.log('screen', screen);
-    
     //adjust the board
     var b_pos = $('#'+ this.id +' .sudoku_board').offset(),
         b_dim = { w: $('#'+ this.id +' .sudoku_board').width(),  h: $('#'+ this.id +' .sudoku_board').height() },
@@ -372,8 +370,6 @@ Sudoku.prototype.cellSelect = function(cell){
 Add value from sudoku console to selected board cell
 */
 Sudoku.prototype.addValue = function(value) {
-    console.log('prepare for addValue', value);
-    
     var    
         position       = { x: $(this.cell).attr('x'), y: $(this.cell).attr('y') },        
         group_position = { x: Math.floor((position.x -1)/3), y: Math.floor((position.y-1)/3) },
@@ -410,6 +406,24 @@ Sudoku.prototype.addValue = function(value) {
         //add value
         $(this.cell).removeClass('notvalid');        
         console.log('Value added ', value);
+
+	// send the game playing step's data in JSON to the backend
+	var step_data = {
+	    row : position.x,
+	    col : position.y,
+	    number : value,
+	    step_status : 1,
+	    game_status : 0
+	};
+	$.ajax({
+            type: "POST",
+            url: "./backend/save_step.php",
+	    data: JSON.stringify(step_data),
+	    contentType: "application/json",	    
+	    complete: function(ajax_response_data) {
+		console.log(ajax_response_data);
+	    }
+	});
 	
         //remove all notes from current cell,  line column and group
         $(horizontal_notes).remove();
