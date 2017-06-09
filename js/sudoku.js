@@ -31,7 +31,10 @@ function Sudoku(params) {
     return this;
 }
 
-Sudoku.prototype.init = function() {    
+Sudoku.prototype.init = function() {
+    $('#tutorial_info').hide();
+    $('#sudoku_container').show();
+    
     this.status = this.INIT;
     this.cellsComplete = 0;
     this.board = [];
@@ -45,7 +48,7 @@ Sudoku.prototype.init = function() {
     }
     
     this.board = this.boardGenerator(this.n, this.fixCellsNr);
-    
+
     return this;
 };
 
@@ -549,7 +552,14 @@ $(function() {
     });
     
     game.run();
-  
+
+    $('#game_steps').DataTable({
+	scrollY: 400,
+	searching: false,
+	paging: false,
+	ajax: './backend/get_steps.php'	
+    });	
+    
     //restart game
     $('#'+ game.id +' .restart').on('click', function(){
         game.init().run();
@@ -557,5 +567,20 @@ $(function() {
   
     $('#restart').on('click', function(){
         game.init().run();
+    });
+
+    $('#show_tutorial').on('click', function() {
+	$('#sudoku_container').hide();
+	$('#tutorial_info').show();
+    });
+
+    $('#review_played_games').on('click', function() {
+	$('#project_info').hide();
+	$('#game_reviewer').show();
+    });
+    
+    $('#show_project_info').on('click', function() {
+	$('#game_reviewer').hide();
+	$('#project_info').show();
     });
 });
