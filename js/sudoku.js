@@ -553,7 +553,7 @@ $(function() {
     
     game.run();
 
-    $('#game_steps').DataTable({
+    var data_table = $('#game_steps').DataTable({
 	scrollY: 400,
 	searching: false,
 	paging: false,
@@ -577,6 +577,7 @@ $(function() {
     $('#review_played_games').on('click', function() {
 	$('#project_info').hide();
 	$('#game_reviewer').show();
+	data_table.ajax.reload();
     });
     
     $('#show_project_info').on('click', function() {
