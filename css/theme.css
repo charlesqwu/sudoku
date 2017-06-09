@@ -1,0 +1,42 @@
+body {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;        
+    /*
+    background:url(
+	data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAIUlEQVQYV2N89urtfwYiACNIoZSYMCMhtaMK8YYQ0cEDAG5yJ8eLRhTfAAAAAElFTkSuQmCC
+    ) repeat;
+    */
+}
+
+.footer {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+}
+
+/* Our slogan / mission statement: Let's Play Sudoku! */
+.jumbotron {
+    height: 100px;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    background-color: transparent;
+}
+
+.action-buttons {
+    text-align: center;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    /* Remove the padding we set earlier */
+    .masthead,
+    .marketing,
+    .footer {
+	padding-right: 0;
+	padding-left: 0;
+    }
+}
+
